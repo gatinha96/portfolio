@@ -306,12 +306,6 @@ export const skills = [
         tags: ["technology", "ccg"]
     },
     {
-        id: "websocket",
-        title: "WebSocket",
-        icon: "websocket.svg",
-        tags: ["technology", "ccg"]
-    },
-    {
         id: "windows",
         title: "Windows",
         icon: FaWindows,
