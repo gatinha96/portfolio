@@ -1,0 +1,487 @@
+/* Mobile top bar selected tab stretches to top edge and loses bottom corners */
+.mobile-topbar-tab {
+  width: auto;
+  min-width: fit-content;
+  flex: 0 0 auto;
+}
+
+.mobile-topbar-tab-selected {
+  border-radius: 1rem 1rem 0 0 !important;
+  margin-bottom: -10px;
+  padding-top: calc(0.5rem - 4px) !important;
+  padding-bottom: calc(0.5rem + 3px);
+  border-top-width: 6px !important;
+  z-index: 20;
+  position: relative;
+  overflow: visible;
+  background-color: var(--section-active-bg) !important;
+  background-image: none !important;
+}
+
+.mobile-topbar-tab-selected::before,
+.mobile-topbar-tab-selected::after {
+  content: "";
+  position: absolute;
+  bottom: calc(-2px);
+  width: calc(0.75rem + 2px);
+  height: calc(0.75rem + 2px);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(0.35rem) scale(0.72);
+  animation: mobile-curve-reveal 180ms ease-out both;
+  transition: clip-path 150ms ease;
+}
+
+.mobile-topbar-tab-selected::before {
+  left: calc(-0.75rem);
+  /* clip-path: inset(0 var(--curve-top-clip, 0px) 0 0); */
+  background-image: radial-gradient(
+    circle at top left,
+    transparent 0,
+    transparent calc(0.75rem - 1px),
+    var(--section-accent-border) calc(0.75rem - 1px),
+    var(--section-accent-border) 0.75rem,
+    var(--section-bg, #0f172a) 0.75rem
+  );
+}
+
+.mobile-topbar-tab-selected::after {
+  right: calc(-0.75rem);
+  /* clip-path: inset(0 0 var(--curve-bottom-clip, 0px) 0); */
+  background-image: radial-gradient(
+    circle at top right,
+    transparent 0,
+    transparent calc(0.75rem - 1px),
+    var(--section-accent-border) calc(0.75rem - 1px),
+    var(--section-accent-border) 0.75rem,
+    var(--section-bg, #0f172a) 0.75rem
+  );
+}
+
+@keyframes mobile-curve-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(0.35rem) scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+/* Draw the top bar bottom outline using a pseudo-element so buttons can overlap it */
+#mobile-top-bar {
+  position: sticky; /* keep intended positioning semantics */
+}
+#mobile-top-bar::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: var(--mobile-topbar-border, #374151);
+  z-index: 0; /* sit below buttons */
+  pointer-events: none;
+}
+
+/* Ensure mobile tabs sit above the pseudo-element */
+.mobile-topbar-tab {
+  position: relative;
+  z-index: 5;
+}
+
+.filter-dropdown-tab {
+  position: relative;
+  z-index: 5;
+}
+
+.filter-dropdown-tab-open {
+  margin-bottom: calc(-0.5rem - 1px);
+  padding-bottom: calc(0.375rem + 0.5rem + 1px) !important;
+  z-index: 10;
+}
+
+/* Both sides rounded by default, but only right side for idle, left for active */
+.sidebar-tab-btn {
+  --sidebar-active-curve-size: 0.3rem;
+  border-radius: 1rem 1rem 1rem 1rem;
+  border-width: 2px;
+  width: 100%;
+  display: block;
+  min-width: 0;
+  background: none;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.sidebar-tab-idle {
+  background-color: var(--section-control-bg);
+  border-color: var(--section-control-border);
+  color: rgba(255,255,255,0.78);
+  border-radius: 1rem 1rem 1rem 1rem;
+}
+.sidebar-tab-idle:hover {
+  background-color: var(--section-control-hover-bg);
+  color: rgba(255,255,255,0.96);
+  border-color: var(--section-accent-border);
+}
+.sidebar-tab-selected {
+  background-color: var(--section-active-bg);
+  color: var(--section-accent-text);
+  border-color: var(--section-accent-border);
+}
+.sidebar-tab-selected:not(.mobile-topbar-tab) {
+  border-left-width: 6px;
+}
+/* Shift selected sidebar tab text slightly right for emphasis (only when stretched on sidebar) */
+.sidebar-tab-btn.sidebar-tab-active:not(.mobile-topbar-tab) {
+  padding-left: 1.125rem;
+}
+.sidebar-tab-active {
+  border-right-color: var(--section-bg, #0f172a);
+  box-shadow: 2px 0 8px 0 rgba(0,0,0,0.08);
+  /* extend slightly more to ensure the section left border is covered */
+  margin-right: -2.05rem;
+  width: calc(100% + 2.05rem);
+  z-index: 20;
+  position: relative;
+  border-radius: 1rem 0 0 1rem;
+  overflow: visible;
+}
+
+.sidebar-tab-active::before,
+.sidebar-tab-active::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  width: calc(var(--sidebar-active-curve-size) + 2px);
+  height: calc(var(--sidebar-active-curve-size) + 2px);
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-0.35rem) scale(0.72);
+  animation: sidebar-curve-reveal 180ms ease-out both;
+  transition: clip-path 150ms ease;
+}
+
+.sidebar-tab-active::before {
+  top: calc(-1 * var(--sidebar-active-curve-size));
+  right: calc(-2px);
+  clip-path: inset(var(--curve-top-clip, 0px) 0 0 0);
+  background-image: radial-gradient(
+    circle at top left,
+    transparent 0,
+    transparent calc(var(--sidebar-active-curve-size) - 1px),
+    var(--section-accent-border) calc(var(--sidebar-active-curve-size) - 1px),
+    var(--section-accent-border) var(--sidebar-active-curve-size),
+    var(--section-bg, #0f172a) var(--sidebar-active-curve-size)
+  );
+}
+
+.sidebar-tab-active::after {
+  bottom: calc(-1 * var(--sidebar-active-curve-size));
+  right: calc(-2px);
+  clip-path: inset(0 0 var(--curve-bottom-clip, 0px) 0);
+  background-image: radial-gradient(
+    circle at bottom left,
+    transparent 0,
+    transparent calc(var(--sidebar-active-curve-size) - 1px),
+    var(--section-accent-border) calc(var(--sidebar-active-curve-size) - 1px),
+    var(--section-accent-border) var(--sidebar-active-curve-size),
+    var(--section-bg, #0f172a) var(--sidebar-active-curve-size)
+  );
+}
+
+@keyframes sidebar-curve-reveal {
+  from {
+    opacity: 0;
+    transform: translateX(-0.35rem) scale(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0) scale(1);
+  }
+}
+/* Custom horizontal scrollbar for FilterChips to match page background */
+.filter-chips-scrollbar::-webkit-scrollbar {
+  height: 8px;
+}
+.filter-chips-scrollbar::-webkit-scrollbar-thumb {
+  background: #374151; /* Tailwind gray-700 */
+  border-radius: 4px;
+}
+.filter-chips-scrollbar::-webkit-scrollbar-track {
+  background: #0f172a; /* Tailwind gray-950 */
+}
+
+/* For Firefox */
+.filter-chips-scrollbar {
+  scrollbar-color: #374151 #0f172a;
+  scrollbar-width: thin;
+}
+
+/* Vertical scrollbar for filter drawers */
+.filter-drawer-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+.filter-drawer-scrollbar::-webkit-scrollbar-thumb {
+  background: #374151;
+  border-radius: 4px;
+}
+.filter-drawer-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.filter-drawer-scrollbar {
+  scrollbar-color: #374151 transparent;
+  scrollbar-width: thin;
+}
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+}
+
+.section-card {
+  background-color: var(--section-card-bg);
+  border-color: var(--section-card-border);
+}
+
+.section-card-strong {
+  background-color: var(--section-card-bg-strong);
+  border-color: var(--section-card-border);
+}
+
+.section-chip {
+  background-color: var(--section-control-bg);
+  border-color: var(--section-control-border);
+  color: rgba(255, 255, 255, 0.88);
+}
+
+.section-control-idle {
+  background-color: var(--section-control-bg);
+  border-color: var(--section-control-border);
+  color: rgba(255, 255, 255, 0.78);
+}
+
+.section-control-idle:hover {
+  background-color: var(--section-control-hover-bg);
+  border-color: var(--section-accent-border);
+  color: rgba(255, 255, 255, 0.96);
+}
+
+.section-control-active {
+  background-color: var(--section-accent-bg);
+  border-color: var(--section-accent-border);
+  color: var(--section-accent-text);
+}
+
+.section-control-partial {
+  background-color: var(--section-soft-bg);
+  border-color: var(--section-accent-border);
+  color: rgba(255, 255, 255, 0.96);
+}
+
+
+.section-accent-button {
+  background-color: var(--section-accent-bg);
+  border-color: var(--section-accent-border);
+  color: var(--section-accent-text);
+  display: inline-flex;
+  align-items: flex-start;
+  text-align: left;
+  min-height: 2rem;
+  height: auto;
+  white-space: normal;
+  line-height: 1.35;
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+}
+
+.section-accent-button:hover {
+  background-color: var(--section-accent-hover-bg);
+}
+
+.section-soft-highlight {
+  background-color: var(--section-soft-bg);
+  border-left-color: var(--section-accent-line) !important;
+}
+
+.section-soft-hover:hover {
+  background-color: var(--section-soft-hover-bg);
+}
+
+.section-outline-active {
+  outline: 2px solid var(--section-accent-ring);
+}
+
+.section-icon-surface {
+  background-color: var(--section-control-bg);
+  border-color: var(--section-control-border);
+}
+
+.section-progress-fill {
+  background-color: var(--section-accent-line);
+}
+
+.section-timeline-accent {
+  background-color: var(--section-accent-line);
+}
+
+.section-year-active {
+  color: var(--section-accent-line);
+}
+
+.section-year-tick-active {
+  background-color: var(--section-accent-line);
+}
+
+.vertical-timeline {
+  --timeline-width: 88px;
+  --timeline-track-x: 68px;
+  --timeline-label-width: 54px;
+}
+
+@media (max-width: 639px) {
+  .vertical-timeline {
+    --timeline-width: 64px;
+    --timeline-track-x: 44px;
+    --timeline-label-width: 30px;
+  }
+}
+
+/* Animated left-accent for entries */
+.section-entry {
+  position: relative;
+  transition: background-color 260ms cubic-bezier(.2,.8,.2,1), box-shadow 260ms cubic-bezier(.2,.8,.2,1), border-color 260ms cubic-bezier(.2,.8,.2,1);
+  border-top: 1px solid #374151;
+  border-bottom: 1px solid #374151;
+}
+
+/* Hide top border for the very first entry by default; reveal and pad when opened */
+.section-entry:first-child {
+  border-top-color: transparent;
+}
+.section-entry.open:first-child {
+  border-top-color: var(--section-accent-line);
+  padding-top: 2rem; /* match pt-8 used for other entries */
+}
+.section-entry.open {
+  background-color: var(--section-soft-bg);
+  border-top-color: var(--section-accent-line);
+  border-bottom-color: var(--section-accent-line);
+}
+
+/* Hide bottom border for the very last entry by default; reveal when opened */
+.section-entry:last-child {
+  border-bottom-color: transparent;
+}
+.section-entry.open:last-child {
+  border-bottom-color: var(--section-accent-line);
+  border-bottom-style: solid;
+  border-bottom-width: 1px;
+  padding-bottom: 1.5rem; /* match pb-6 used on other entries */
+}
+
+/* Dim highlight on hover (for entries that are not currently open) */
+.section-entry:not(.open):not(.force-open):hover {
+  /* use a subtle translucent inset overlay so the effect is theme-agnostic and much dimmer */
+  background-color: transparent;
+  box-shadow: inset 0 0 0 9999px rgba(255,255,255,0.02);
+}
+
+/* Vertical line for sub-entries (use pseudo-element so highlights can overlay it) */
+.section-subentries {
+  position: relative;
+  /* expose a couple layout variables to keep offsets consistent with Tailwind utilities */
+  --ss-pl: 1rem; /* corresponds to Tailwind `pl-4` */
+  --ss-selected-inner-pl: 0.5rem; /* corresponds to Tailwind `pl-2` when used */
+  --ss-gap: 0; /* default no gap between sub-entries */
+  --ss-item-vert-pad: 0.75rem; /* vertical padding for each sub-entry (top & bottom) */
+}
+.section-subentries.space-y-4 { --ss-gap: 1rem; }
+.section-subentries.space-y-6 { --ss-gap: 1.5rem; }
+.section-subentries::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: #374151; /* default gray-800 */
+  transition: background-color 260ms cubic-bezier(.2,.8,.2,1);
+  z-index: 0;
+}
+.section-entry.open .section-subentries::before {
+  background-color: var(--section-accent-line);
+}
+
+/* For permanently expanded entries, make sub-entry hover use the same dim overlay as entries */
+.section-entry.force-open .section-subentries .section-soft-hover:hover,
+.section-entry.force-open .section-subentries .section-soft-hover:focus-visible {
+  background-color: transparent;
+  box-shadow: inset 0 0 0 9999px rgba(255,255,255,0.02);
+}
+
+/* Keep selected sub-entries' selected background when hovered/focused */
+.section-subentries .section-soft-highlight.section-soft-hover:hover,
+.section-subentries .section-soft-highlight.section-soft-hover:focus-visible,
+.section-entry.force-open .section-subentries .section-soft-highlight.section-soft-hover:hover,
+.section-entry.force-open .section-subentries .section-soft-highlight.section-soft-hover:focus-visible {
+  background-color: var(--section-soft-bg);
+  box-shadow: none;
+}
+
+/* Extend the selected background to the vertical line and draw a highlighted segment on the line */
+.section-subentries > * {
+  /* apply consistent vertical padding to all sub-entry items */
+  padding-top: var(--ss-item-vert-pad);
+  padding-bottom: var(--ss-item-vert-pad);
+}
+.section-subentries > *:first-child {
+  padding-top: 0;
+}
+
+.section-subentries .section-soft-highlight {
+  position: relative;
+  z-index: 2; /* sit above the base vertical line */
+  margin-left: calc(-1 * var(--ss-pl)); /* pull left to the container edge where the line sits */
+}
+
+/* Keep content aligned depending on whether `pl-2` utility was applied in markup */
+.section-subentries .pl-2.section-soft-highlight {
+  padding-left: calc(var(--ss-pl) + var(--ss-selected-inner-pl));
+}
+.section-subentries .section-soft-highlight:not(.pl-2) {
+  padding-left: var(--ss-pl);
+}
+
+/* small accent overlay where the highlight intersects the vertical line */
+.section-subentries .section-soft-highlight::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background-color: var(--section-accent-line);
+  border-radius: 0px;
+  z-index: 3;
+}
+
+/* Keep selected sub-entries' selected background when hovered/focused */
+.section-subentries .section-soft-highlight.section-soft-hover:hover,
+.section-subentries .section-soft-highlight.section-soft-hover:focus-visible,
+.section-entry.force-open .section-subentries .section-soft-highlight.section-soft-hover:hover,
+.section-entry.force-open .section-subentries .section-soft-highlight.section-soft-hover:focus-visible {
+  background-color: var(--section-soft-bg);
+  box-shadow: none;
+}
