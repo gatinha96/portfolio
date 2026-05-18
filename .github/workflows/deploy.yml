@@ -29,7 +29,6 @@ jobs:
           path: dist
 
   deploy:
-    environment: github-pages
     needs: build
     runs-on: ubuntu-latest
 
