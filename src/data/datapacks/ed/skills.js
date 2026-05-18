@@ -180,12 +180,6 @@ export const skills = [
         tags: ["language", "personal", "university"]
     },
     {
-        id: "matlab",
-        title: "MATLAB",
-        icon: "matlab.svg",
-        tags: ["language", "university"]
-    },
-    {
         id: "mobile",
         title: "Mobile Development",
         icon: FaMobileAlt,
